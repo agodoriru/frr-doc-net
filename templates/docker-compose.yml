@@ -1,0 +1,34 @@
+version: "3"
+services:
+        host1:
+                build: ./ubuntu
+                container_name: host1
+                hostname: host1
+                networks:
+                        - exp-net1
+                        - exp-net2
+        frr1:
+                build: ./frr
+                container_name: frr
+                hostname: frr
+                networks:
+                        - exp-net1
+                        - exp-net2
+                privileged: true
+                depends_on:
+                        - "host1"
+
+networks:
+        exp-net1:
+                driver: bridge
+                ipam:
+                        driver: default
+                        config:
+                                - subnet: 10.11.0.0/16
+        exp-net2:
+                driver: bridge
+                ipam:
+                        driver: default
+                        config:
+                                - subnet: 10.12.0.0/16
+                           
